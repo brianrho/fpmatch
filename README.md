@@ -1,7 +1,7 @@
-﻿## Server/PC-side matching (in C) for R3xx/FPMxx/ZFMxx fingerprint sensors
+﻿## Server/PC-side matching for R3xx/FPMxx/ZFMxx fingerprint sensors
 
-This is based on a poorly documented DLL I found in the SDK which performs the actual matching.
-Tested only on Windows but not thoroughly, though results are promising and almost
+This is written in C and is based on a poorly documented DLL I found in the SDK which performs the actual matching.
+It's been tested only on Windows but not thoroughly, though results are promising and almost
 the same (in terms of fingerprint match scores) as those from the sensor itself. 
 
 The DLL matching functions seem to accept only 256-byte arrays, which is consistent
