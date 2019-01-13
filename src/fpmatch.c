@@ -1,10 +1,10 @@
 /*
  ============================================================================
- Name        : fmatch.c
+ Name        : fpmatch.c
  Author      : Brian Ejike (2018, brianrho94@gmail.com)
  Version     :
  Copyright   : MIT licence
- Description : Template match
+ Description : Template matching
  ============================================================================
  */
 
@@ -41,9 +41,9 @@ int main(void) {
 
 	printf("Match result: %d, took %lf secs.\n", score, (double)(end - begin) / CLOCKS_PER_SEC);
 	if (score > MATCH_THRESHOLD)
-		printf("Prints match.\n");
+		printf("Templates match.\n");
 	else
-		printf("Prints dont match!\n");
+		printf("Templates do not match!\n");
 
 	return 0;
 }
