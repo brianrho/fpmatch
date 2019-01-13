@@ -1,3 +1,6 @@
+# Author: Brian Ejike (2019)
+# Distributed under the MIT license
+
 from ctypes import *
 
 MATCH_THRESHOLD = 50
