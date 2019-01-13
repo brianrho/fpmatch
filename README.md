@@ -1,6 +1,6 @@
 ﻿## Server/PC-side matching for R3xx/FPMxx/ZFMxx fingerprint sensors
 
-There are C source files (tested with TDM-GCC) and a Python 3 script. 
+There are C files (tested with TDM-GCC) and a Python 3 script. 
 You can use the latter if you want to test quickly or don't mind that Python will be slower.
 Just make sure the DLL is in the same directory as the Python script.
 
