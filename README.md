@@ -15,4 +15,6 @@ If this is the case, then the arguments of the matching function make sense.
 This means that for matching, only the first 256 bytes of a template are actually needed. This may
 halve transfer times if you're sending templates over a network.
 
+For questions regarding availability on Linux, check [here](https://github.com/brianrho/fpmatch/issues/1).
+
 Use at your own risk.
