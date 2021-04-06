@@ -20,8 +20,12 @@
 #define FPM_CHAR_SIZE           256
 
 /* size of a single template stored within the sensor's flash library
- * this varies from sensor to sensor, each template seems to hold multiple feature files
- * one file per image captured either during enrollment or verification */
+ * this varies from sensor to sensor, each template seems to hold multiple feature files,
+ * one file per image captured either during enrollment (or successful verification).
+ * So, in this case:
+ * [[----- FEATUTE FILE (256 B) -----][----- FEATURE FILE (256 B) -----]]
+ * [------------------------ TEMPLATE (512 B) --------------------------]
+ */
 #define FPM_TEMPLATE_SIZE       512
 
 /* arbitrary score/confidence threshold */
@@ -33,7 +37,8 @@ int WINAPI (*GenChar)(unsigned char* FingerData, unsigned char* CharData);
 
 void search_database(unsigned char * input, unsigned char ** db, uint16_t db_size);
 
-int main(void) {
+int main(void) 
+{
 	setvbuf(stdout, NULL, _IONBF, 0);
 	
 	struct pe_image image = {
@@ -56,22 +61,23 @@ int main(void) {
         return 1;
     }
     
+    /* boilerplate that's probably unnecessary for this example */
     setup_nt_threadinfo(NULL);
     
-    /* template database we want to search */
-	unsigned char *database[] = {correctMatch, template1, template2};
+    /* construct the template database we want to search */
+    unsigned char *database[] = {correctMatch, template1, template2};
 
-	/* perform a bunch of matches and check how long they take */
-	clock_t begin, end;
-	begin = clock();
-	
-	search_database(userInput, database, sizeof(database)/sizeof(database[0]));
-	
-	end = clock();
+    /* search the database for some user input print and and see how long it takes */
+    clock_t begin, end;
+    begin = clock();
 
-	printf("Took %lf secs.\n", (double)(end - begin) / CLOCKS_PER_SEC);
+    search_database(userInput, database, sizeof(database)/sizeof(database[0]));
 
-	return 0;
+    end = clock();
+
+    printf("Took %lf secs.\n", (double)(end - begin) / CLOCKS_PER_SEC);
+
+    return 0;
 }
 
 /* search a given database for an input feature file and print all scores */
