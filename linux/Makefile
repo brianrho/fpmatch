@@ -1,7 +1,7 @@
 # Copyright (C) 2021 https://github.com/taviso/loadlibrary, GPLv2 License
 
 # replace with the correct path to loadlibrary
-LOADLIBRARY_DIR := ../loadlibrary
+LOADLIBRARY_DIR := ../../loadlibrary
 
 INTERCEPTS_DIR  := $(LOADLIBRARY_DIR)/intercept
 PELOADER_DIR    := $(LOADLIBRARY_DIR)/peloader
