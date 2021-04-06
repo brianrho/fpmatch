@@ -39,9 +39,9 @@ void search_database(unsigned char * input, unsigned char ** db, uint16_t db_siz
 
 int main(void) 
 {
-	setvbuf(stdout, NULL, _IONBF, 0);
-	
-	struct pe_image image = {
+    setvbuf(stdout, NULL, _IONBF, 0);
+
+    struct pe_image image = {
         .entry  = NULL,
         .name   = "../common/ARTH_DLL.dll",
     };
