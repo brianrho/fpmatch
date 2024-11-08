@@ -1,18 +1,25 @@
 # Copyright (C) 2021, Brian Ejike, MIT License
 
 import os
+import sys
 import ctypes
 
-# (apparent) size of a single feature file (aka character file) 
-# after the sensor processes a single image
+# 32-bit Python is required to load the sensor DLL (which is also 32-bit)
+if sys.maxsize > 2**32:
+    print("You have 64-bit Python. 32-bit Python is required to load the DLL.")
+    sys.exit(1)
+    
+# (Apparent) size of a single feature file (aka character file) 
+# after the sensor processes a single image.
+# This is also implicitly equal to the size of the feature file expected by the DLL's Match2Fp().
 FPM_CHAR_SIZE = 256
 
-# size of a single template stored within the sensor's flash library
-# this varies from sensor to sensor, each template seems to hold multiple feature files
-# one file per image captured either during enrollment or verification
+# The size of a single template stored within the sensor's flash library.
+# This varies from sensor to sensor, each template seems to hold multiple feature files
+# i.e. one file per image captured either during enrollment or verification
 FPM_TEMPLATE_SIZE = 512
 
-# arbitrary score/confidence threshold
+# According to the DLL's API manual, scores >= 50 indicate a successful match.
 FPM_MATCH_THRESHOLD = 50
 
 # userInput is a dump of the sensor's RAM buffer after getting and converting a single image.
@@ -172,17 +179,24 @@ if __name__ == "__main__":
     # assemble database
     database = [correctMatch, template1, template2]
     
-    # iterate through database and match user input against each template
-    for template in database:
-        # match against each feature file within the template
-        first = arth.Match2Fp(bytes(userInput), bytes(template))
-        second = arth.Match2Fp(bytes(userInput), bytes(template)[FPM_CHAR_SIZE:])
+    # Iterate through the database and match the user input against each template
+    # to identify all successful matches
+    for tidx, template in enumerate(database):
+        scores = []
         
-        avg_score = (first + second) // 2
+        # Match against each feature file within the template.
+        # The function is expected to process only the first FPM_CHAR_SIZE of the passed buffers.
         
-        print("First: {}, Second: {}, Average: {}".format(first, second, avg_score))
+        for cidx in range(FPM_TEMPLATE_SIZE // FPM_CHAR_SIZE):
+            scores.append(arth.Match2Fp(bytes(userInput), bytes(template)[FPM_CHAR_SIZE * cidx:]))
+        
+        avgScore = sum(scores) // len(scores)
+        
+        print("{}: Scores: {}, Average: {}".format(tidx, scores, avgScore))
 
-        if score > FPM_MATCH_THRESHOLD:
-            print('Templates match.')
+        if avgScore >= FPM_MATCH_THRESHOLD:
+            print('{}: Templates match.'.format(tidx))
         else:
-            print('Templates do not match!')
+            print('{}: Templates do not match!'.format(tidx))
+            
+        print()
